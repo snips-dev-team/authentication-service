@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/app.ts",
-    "build": "sucrase ./src -d ./dist --transforms typescript,imports"
+    "build": "sucrase ./src -d ./dist --transforms typescript,imports",
+    "knex:migrate": "cd src && env $(cat ../.env) knex migrate:latest --knexfile config/db.js",
+    "knex:migrate:make": "cd src && env $(cat ../.env) knex migrate:make --knexfile config/db.js",
+    "knex:migrate:down": "cd src && env $(cat ../.env) knex migrate:down --knexfile config/db.js"
   },
   "repository": {
     "type": "git",
@@ -19,6 +22,7 @@
   },
   "homepage": "https://github.com/snips-dev-team/authentication-service#readme",
   "devDependencies": {
+    "@types/cors": "^2.8.10",
     "@types/express": "^4.17.11",
     "@typescript-eslint/eslint-plugin": "^4.20.0",
     "@typescript-eslint/parser": "^4.20.0",
@@ -28,6 +32,10 @@
     "typescript": "^4.2.3"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "knex": "^0.95.4",
+    "typedi": "^0.10.0"
   }
 }
