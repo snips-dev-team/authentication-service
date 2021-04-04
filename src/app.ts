@@ -5,7 +5,6 @@ import loaders from "./loaders";
 const startServer = (port: string) => {
   const app = express();
 
-  console.log(app);
   loaders(app);
 
   app

@@ -1,6 +1,6 @@
 import knex from "knex";
 import { Container } from "typedi";
-import dbConfig from "../config/db.js";
+import dbConfig from "../config/db";
 
 function dbLoader(): void {
   console.log("Connecting in database");
