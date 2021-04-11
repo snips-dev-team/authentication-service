@@ -33,41 +33,43 @@ export default class EmailService {
     const emailsToSend = await this.queueCrudService.list().catch((error: any) => {
       console.log(error);
     });
-    console.log(emailsToSend);
-    emailsToSend.forEach(async (emailToSend) => {
-      const user = await this.userAuthenticationCrudService.get({ id: emailToSend.user_authentication_id });
-      if (!user) return;
-      const client = await this.clientCrudService.get({ id: user.client_id });
-      console.log(client);
-      if (!client) return;
-      let template;
-      if (typeof client.name === "string") {
-        template = EmailTemplates(client.name, user);
-      }
-      if (
-        typeof client.name === "string" &&
-        typeof emailToSend.template === "string" &&
-        typeof user.email === "string" &&
-        template
-      ) {
-        await this.transporter
-          .sendMail({
-            from: `"${client.name}" <${email.from}>`,
-            to: user.email,
-            subject: template[emailToSend.template].subject,
-            text: template[emailToSend.template].text,
-            html: template[emailToSend.template].html,
-          })
-          .then(async () => {
-            if (typeof emailToSend.id === "number") {
-              await this.queueCrudService.remove(emailToSend.id);
-              await this.logCrudService.create({ email: user.email, template: emailToSend.template });
-            }
-          })
-          .catch(() => {
-            console.log(`Error sending email ${emailToSend.to} ${emailToSend.template}`);
-          });
-      }
-    });
+    console.log("emailsToSend", emailsToSend);
+    if (typeof emailsToSend === "object") {
+      emailsToSend.forEach(async (emailToSend: any) => {
+        const user = await this.userAuthenticationCrudService.get({ id: emailToSend.user_authentication_id });
+        if (!user) return;
+        const client = await this.clientCrudService.get({ id: user.client_id });
+        console.log(client);
+        if (!client) return;
+        let template;
+        if (typeof client.name === "string") {
+          template = EmailTemplates(client.name, user);
+        }
+        if (
+          typeof client.name === "string" &&
+          typeof emailToSend.template === "string" &&
+          typeof user.email === "string" &&
+          template
+        ) {
+          await this.transporter
+            .sendMail({
+              from: `"${client.name}" <${email.from}>`,
+              to: user.email,
+              subject: template[emailToSend.template].subject,
+              text: template[emailToSend.template].text,
+              html: template[emailToSend.template].html,
+            })
+            .then(async () => {
+              if (typeof emailToSend.id === "number") {
+                await this.queueCrudService.remove(emailToSend.id);
+                await this.logCrudService.create({ email: user.email, template: emailToSend.template });
+              }
+            })
+            .catch(() => {
+              console.log(`Error sending email ${emailToSend.to} ${emailToSend.template}`);
+            });
+        }
+      });
+    }
   }
 }

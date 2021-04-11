@@ -38,7 +38,7 @@ export default (app: Router): void => {
     const encryptPassword = encryptFunctions.encryptPassword(body.password);
     // Create client
     const user = await crudService.create({ email: body.email, password: encryptPassword, name: body.name });
-    const token = jwt.sign({ id: user.id }, encrypt.jwt);
+    const token = jwt.sign({ id: user[0] }, encrypt.jwt);
     return res.json({ error: false, token });
   });
 

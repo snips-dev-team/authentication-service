@@ -21,6 +21,10 @@ export default (app: Router): void => {
   const crudService = new CrudService(tableName);
 
   route.post("/register", JwtMiddleware, async (req: any, res) => {
+    console.log("req.user", req.user);
+    if (!("id" in req.user)) {
+      return res.json({ error: true, messgae: "Auth error, token invalid" });
+    }
     const body = getData(req, res);
     // Verify fields
     const requiredFields = ["token_content", "email", "password"];
@@ -40,6 +44,7 @@ export default (app: Router): void => {
     }
     const encryptPassword = encryptFunctions.encryptPassword(body.password);
     // Create client
+
     const user = await crudService.create({
       email: body.email,
       password: encryptPassword,
