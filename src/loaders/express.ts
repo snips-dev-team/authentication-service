@@ -1,9 +1,10 @@
 import cors from "cors";
-import { json } from "express";
+import { json, Express } from "express";
 import routes from "../api";
 import config from "../config";
 
-function express(app: any): void {
+function express(app: Express): void {
+  console.log("Configurating express");
   app.use(cors());
   app.use(json());
   app.use(config.api.prefix, routes());

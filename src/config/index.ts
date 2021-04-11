@@ -3,19 +3,24 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export default {
-  port: process.env.PORT,
-  environment: process.env.ENVIRONMENT,
+  application: {
+    port: process.env.PORT!,
+  },
   api: {
-    prefix: process.env.API_PREFIX,
+    prefix: process.env.API_PREFIX!,
   },
   db: {
-    url: process.env.DB_URL,
-    url_homolog: process.env.DB_URL_HOMOLOG,
+    url: process.env.DB_URL!,
+    url_homolog: process.env.DB_URL_HOMOLOG!,
   },
-  session: {
-    secret: process.env.JWT_SECRET,
+  encrypt: {
+    // Encrypt email from client email
+    fields: process.env.ENCRYPT_SECRET!,
+    // Encrypt jwt tokens
+    jwt: process.env.ENCRYPT_JWT_SECRET!,
   },
-  users: {
-    password_secret: process.env.PASSWORD_SECRET,
+  email: {
+    from: process.env.EMAIL_FROM,
+    password: process.env.EMAIL_PASSWORD,
   },
 };

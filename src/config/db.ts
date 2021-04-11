@@ -1,9 +1,10 @@
-import config from "./index";
+import config from "../config";
+
+const { db } = config;
 
 export default {
   client: "pg",
-  connection:
-    config.environment === "production" ? config.db.url : config.db.url_homolog,
+  connection: db.url,
   migrations: {
     directory: "../db/migrations",
     tableName: "tb_migrations",
